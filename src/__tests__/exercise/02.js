@@ -4,7 +4,12 @@
 import * as React from 'react'
 import ReactDOM from 'react-dom'
 // 🐨 import the `render` and `fireEvent` utilities from '@testing-library/react'
-import {render, fireEvent, screen} from '@testing-library/react'
+import {
+  render,
+  fireEvent,
+  screen,
+  toHaveTextContent,
+} from '@testing-library/react'
 import Counter from '../../components/counter'
 
 test('counter increments and decrements when the buttons are clicked', () => {
@@ -22,14 +27,16 @@ test('counter increments and decrements when the buttons are clicked', () => {
   const [decrement, increment] = container.querySelectorAll('button')
   const message = container.firstChild.querySelector('div')
 
-  expect(message.textContent).toBe('Current count: 0')
+  expect(message).toHaveTextContent('Current count: 0')
 
   // 🐨 replace the next two statements with `fireEvent.click(button)`
 
   fireEvent.click(increment)
-  expect(message.textContent).toBe('Current count: 1')
+  expect(message).toHaveTextContent('Current count: 1')
+
   fireEvent.click(decrement)
 
-  expect(message.textContent).toBe('Current count: 0')
+  expect(message).toHaveTextContent('Current count: 0')
+  // expect(message.textContent).toBe('Current count: 0')
   screen.debug()
 })
