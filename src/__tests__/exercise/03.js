@@ -12,8 +12,8 @@ test('counter increments and decrements when the buttons are clicked', () => {
   // 🐨 replace these with screen queries
   // 💰 you can use `getByText` for each of these (`getByRole` can work for the button too)
   // const [decrement, increment] = container.querySelectorAll('button')
-  const decrement = screen.getByRole('button', {name: 'Decrement'})
-  const increment = screen.getByRole('button', {name: 'Increment'})
+  const decrement = screen.getByRole('button', {name: /decrement/i})
+  const increment = screen.getByRole('button', {name: /increment/i})
 
   // const message = container.firstChild.querySelector('div')
   const message = screen.getByText('Current count:', {exact: false})
