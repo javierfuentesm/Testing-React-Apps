@@ -4,12 +4,7 @@
 import * as React from 'react'
 import ReactDOM from 'react-dom'
 // 🐨 import the `render` and `fireEvent` utilities from '@testing-library/react'
-import {
-  render,
-  fireEvent,
-  screen,
-  toHaveTextContent,
-} from '@testing-library/react'
+import {render, fireEvent, screen} from '@testing-library/react'
 import Counter from '../../components/counter'
 
 test('counter increments and decrements when the buttons are clicked', () => {
