@@ -7,25 +7,34 @@ import userEvent from '@testing-library/user-event'
 import Login from '../../components/login'
 import Counter from '../../components/counter'
 import faker from 'faker'
+import {build, fake} from '@jackfranklin/test-data-bot'
+
+const buildLoginForm = build({
+  fields: {
+    usernameText: fake(faker => faker.internet.userName()),
+    passwordText: fake(faker => faker.internet.password()),
+  },
+})
 
 test('submitting the form calls onSubmit with username and password', () => {
   // let submittedData
   // const handleSubmit = data => (submittedData = data)
 
-  const buildLoginForm = ({usernameText, passwordText}) => {
-    return {
-      usernameText: usernameText ? usernameText : faker.internet.userName(),
-      passwordText: passwordText ? passwordText : faker.internet.password(),
-    }
-  }
+  // const buildLoginForm = ({usernameText, passwordText}) => {
+  //   return {
+  //     usernameText: usernameText ? usernameText : faker.internet.userName(),
+  //     passwordText: passwordText ? passwordText : faker.internet.password(),
+  //   }
+  // }
+
   const handleSubmit = jest.fn()
   render(<Login onSubmit={handleSubmit} />)
 
   const username = screen.getByLabelText('Username')
   const password = screen.getByLabelText('Password')
 
-  // const {usernameText, passwordText} = buildLoginForm()
-  const {usernameText, passwordText} = buildLoginForm({passwordText: 'abc'})
+  const {usernameText, passwordText} = buildLoginForm()
+  // const {usernameText, passwordText} = buildLoginForm({passwordText: 'abc'})
 
   console.log(passwordText)
 
