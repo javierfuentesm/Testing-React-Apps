@@ -12,10 +12,10 @@ test('submitting the form calls onSubmit with username and password', () => {
   // let submittedData
   // const handleSubmit = data => (submittedData = data)
 
-  const buildLoginForm = () => {
+  const buildLoginForm = ({usernameText, passwordText}) => {
     return {
-      usernameText: faker.internet.userName(),
-      passwordText: faker.internet.password(),
+      usernameText: usernameText ? usernameText : faker.internet.userName(),
+      passwordText: passwordText ? passwordText : faker.internet.password(),
     }
   }
   const handleSubmit = jest.fn()
@@ -24,7 +24,11 @@ test('submitting the form calls onSubmit with username and password', () => {
   const username = screen.getByLabelText('Username')
   const password = screen.getByLabelText('Password')
 
-  const {usernameText, passwordText} = buildLoginForm()
+  // const {usernameText, passwordText} = buildLoginForm()
+  const {usernameText, passwordText} = buildLoginForm({passwordText: 'abc'})
+
+  console.log(passwordText)
+
   const submit = screen.getByRole('button', {name: /submit/i})
 
   userEvent.type(username, usernameText)
