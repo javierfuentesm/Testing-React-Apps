@@ -23,6 +23,7 @@ test('submitting the form calls onSubmit with username and password', () => {
   userEvent.click(submit)
   // expect({username: 'lalala', password: 'lelele'}).toEqual(submittedData)
   expect(handleSubmit).toBeCalledWith({username: 'lalala', password: 'lelele'})
+  expect(handleSubmit).toHaveBeenCalledTimes(1)
 })
 
 /*
