@@ -74,7 +74,7 @@ test(`logging in displays the user's username`, async () => {
 
 test(`logging in returns an error if the password or user not provided `, async () => {
   render(<Login />)
-  const {username, password} = buildLoginForm()
+  const {username} = buildLoginForm()
 
   userEvent.type(screen.getByLabelText(/username/i), username)
   userEvent.click(screen.getByRole('button', {name: /submit/i}))
