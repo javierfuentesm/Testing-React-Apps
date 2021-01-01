@@ -7,6 +7,7 @@ import userEvent from '@testing-library/user-event'
 import {build, fake} from '@jackfranklin/test-data-bot'
 import {rest} from 'msw'
 import {setupServer} from 'msw/node'
+import {handlers} from '../../test/server-handlers'
 
 import Login from '../../components/login-submission'
 
@@ -19,19 +20,26 @@ const buildLoginForm = build({
 
 // 🐨 get the server setup with an async function to handle the login POST request:
 // 💰 here's something to get you started
-const server = setupServer(
-  rest.post(
-    'https://auth-provider.example.com/api/login',
-    async (req, res, ctx) => {
-      const {username} = req.body
-      return res(
-        ctx.json({
-          username,
-        }),
-      )
-    },
-  ),
-)
+// const server = setupServer(
+//   rest.post(
+//     'https://auth-provider.example.com/api/login',
+//     async (req, res, ctx) => {
+//       const {username, password} = req.body
+//       if (!password) {
+//         return res(ctx.status(400), ctx.json({message: 'password required'}))
+//       }
+//       if (!username) {
+//         return res(ctx.status(400), ctx.json({message: 'username required'}))
+//       }
+//       return res(
+//         ctx.json({
+//           username,
+//         }),
+//       )
+//     },
+//   ),
+// )
+const server = setupServer(...handlers)
 // you'll want to respond with an JSON object that has the username.
 // 📜 https://mswjs.io/
 
