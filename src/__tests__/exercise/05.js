@@ -84,5 +84,32 @@ test(`logging in returns an error if the password or user not provided `, async 
 
   expect(screen.getByRole('alert')).toBeInTheDocument()
 
-  expect(screen.getByRole('alert').textContent).toEqual('password required')
+  expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
+    `"password required"`,
+  )
+})
+
+test(`unknown server display error message `, async () => {
+  const testErrorMessage = 'Oh no something unexpected happened'
+
+  server.use(
+    rest.post(
+      'https://auth-provider.example.com/api/login',
+      async (req, res, ctx) => {
+        return res(ctx.status(500), ctx.json({message: testErrorMessage}))
+      },
+    ),
+  )
+  render(<Login />)
+  const {username} = buildLoginForm()
+
+  userEvent.type(screen.getByLabelText(/username/i), username)
+  userEvent.click(screen.getByRole('button', {name: /submit/i}))
+  await waitForElementToBeRemoved(() =>
+    screen.getByLabelText(/loading/i),
+  ).catch(err => console.log(err))
+
+  expect(screen.getByRole('alert')).toBeInTheDocument()
+
+  expect(screen.getByRole('alert')).toHaveTextContent(testErrorMessage)
 })
