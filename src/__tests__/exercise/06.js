@@ -4,24 +4,26 @@
 import * as React from 'react'
 import {render, screen, act} from '@testing-library/react'
 import Location from '../../examples/location'
+import {useCurrentPosition} from 'react-use-geolocation'
+jest.mock('react-use-geolocation')
 
-// 🐨 set window.navigator.geolocation to an object that has a getCurrentPosition mock function
-beforeAll(() => {
-  window.navigator.geolocation = {
-    getCurrentPosition: jest.fn(),
-  }
-})
+// // 🐨 set window.navigator.geolocation to an object that has a getCurrentPosition mock function
+// beforeAll(() => {
+//   window.navigator.geolocation = {
+//     getCurrentPosition: jest.fn(),
+//   }
+// })
 
-// 💰 I'm going to give you this handy utility function
-// it allows you to create a promise that you can resolve/reject on demand.
-function deferred() {
-  let resolve, reject
-  const promise = new Promise((res, rej) => {
-    resolve = res
-    reject = rej
-  })
-  return {promise, resolve, reject}
-}
+// // 💰 I'm going to give you this handy utility function
+// // it allows you to create a promise that you can resolve/reject on demand.
+// function deferred() {
+//   let resolve, reject
+//   const promise = new Promise((res, rej) => {
+//     resolve = res
+//     reject = rej
+//   })
+//   return {promise, resolve, reject}
+// }
 // 💰 Here's an example of how you use this:
 // const {promise, resolve, reject} = deferred()
 // promise.then(() => {/* do something */})
@@ -32,20 +34,30 @@ function deferred() {
 
 test('displays the users current location', async () => {
   const fakePosition = {coords: {latitude: 1, longitude: 2}}
-  const {promise, resolve, reject} = deferred()
-
-  window.navigator.geolocation.getCurrentPosition.mockImplementation(
-    callback => {
-      promise.then(() => callback(fakePosition))
-    },
-  )
+  let setReturnValue
+  function useMockCurrentPosition() {
+    const state = React.useState([])
+    setReturnValue = state[1]
+    return state[0]
+  }
+  useCurrentPosition.mockImplementation(useMockCurrentPosition)
+  // const {promise, resolve, reject} = deferred()
+  //
+  // window.navigator.geolocation.getCurrentPosition.mockImplementation(
+  //   callback => {
+  //     promise.then(() => callback(fakePosition))
+  //   },
+  // )
 
   render(<Location />)
   expect(screen.getByLabelText(/loading/i)).toBeInTheDocument()
 
-  await act(async () => {
-    await resolve()
+  act(() => {
+    setReturnValue([fakePosition])
   })
+  // await act(async () => {
+  //   await resolve()
+  // })
   expect(screen.queryByLabelText(/loading/i)).not.toBeInTheDocument()
 
   // If you'd like, learn about what this means and see if you can figure out
