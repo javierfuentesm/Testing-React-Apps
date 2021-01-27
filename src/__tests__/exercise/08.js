@@ -2,7 +2,7 @@
 // http://localhost:3000/counter-hook
 
 import * as React from 'react'
-import {render, screen, fireEvent} from '@testing-library/react'
+import {render, screen, fireEvent, act} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import useCounter from '../../components/use-counter'
 
@@ -27,27 +27,36 @@ const FacekComponent = ({initialCount = 0}) => {
 test('exposes the count and increment/decrement functions', () => {
   // 🐨 render the
   const initialCount = 10
-  render(<FacekComponent initialCount={initialCount} />)
+  // render(<FacekComponent initialCount={initialCount} />)
+  let result
+  function TestFunction({initialCount}) {
+    result = useCounter({initialCount})
 
-  expect(screen.getByRole('heading')).toHaveTextContent(
-    `The count is ${initialCount}`,
-  )
+    return null
+  }
 
-  const increment = screen.getByRole('button', {name: /increment/i})
-  fireEvent.click(increment)
-  expect(screen.getByRole('heading')).toHaveTextContent(
-    `The count is ${initialCount + 1}`,
-  )
-  const decrement = screen.getByRole('button', {name: /decrement/i})
-  fireEvent.click(decrement)
-  expect(screen.getByRole('heading')).toHaveTextContent(
-    `The count is ${initialCount + 1 - 1}`,
-  )
-  screen.debug()
+  render(<TestFunction initialCount={initialCount} />)
 
-  // 🐨 get the elements you need using screen
-  // 🐨 assert on the initial state of the hook
-  // 🐨 interact with the UI using userEvent and assert on the changes in the UI
+  expect(result.count).toBe(initialCount)
+  act(() => result.increment())
+  expect(result.count).toBe(initialCount + 1)
+  act(() => result.decrement())
+  expect(result.count).toBe(initialCount + 1 - 1)
+
+  // expect(screen.getByRole('heading')).toHaveTextContent(
+  //   `The count is ${initialCount}`,
+  // )
+  //
+  // const increment = screen.getByRole('button', {name: /increment/i})
+  // fireEvent.click(increment)
+  // expect(screen.getByRole('heading')).toHaveTextContent(
+  //   `The count is ${initialCount + 1}`,
+  // )
+  // const decrement = screen.getByRole('button', {name: /decrement/i})
+  // fireEvent.click(decrement)
+  // expect(screen.getByRole('heading')).toHaveTextContent(
+  //   `The count is ${initialCount + 1 - 1}`,
+  // )
 })
 
 /* eslint no-unused-vars:0 */
