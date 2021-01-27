@@ -11,8 +11,8 @@ import useCounter from '../../components/use-counter'
 // capabilities of this hook
 // 💰 here's how to use the hook:
 // const {count, increment, decrement} = useCounter()
-const FacekComponent = () => {
-  const {count, increment, decrement} = useCounter()
+const FacekComponent = ({initialCount = 0}) => {
+  const {count, increment, decrement} = useCounter({initialCount})
   return (
     <>
       <button onClick={increment}>Increment</button>
@@ -26,8 +26,8 @@ const FacekComponent = () => {
 
 test('exposes the count and increment/decrement functions', () => {
   // 🐨 render the
-  const initialCount = 0
-  render(<FacekComponent />)
+  const initialCount = 10
+  render(<FacekComponent initialCount={initialCount} />)
 
   expect(screen.getByRole('heading')).toHaveTextContent(
     `The count is ${initialCount}`,
